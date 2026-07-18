@@ -1,0 +1,5 @@
+# Drop real photos here. Naming convention:
+#   {event}-{outfit}-{alex|natalie|together}.jpg
+# e.g. 4-1-alex.jpg  = event 4 (Winery), outfit 1, Alex solo
+#      4-1-together.jpg = event 4, outfit 1, Alex & Natalie together
+# Events are numbered 1–9 in the order they appear in src/data/journey.js.

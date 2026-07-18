@@ -1,0 +1,466 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+/* ---- Palette & tokens ------------------------------------------------ */
+:root {
+  --blue: #6cbfe6;
+  --blue-deep: #4a9fd4;
+  --blue-ink: #1e5c82;
+  --card: #ffffff;
+  --gold: #e3b34a;
+  --gold-notch: #e9c15c;
+  --frame: #7cbfe6;
+  --pin: #e35d8a;
+  --mist: #eef6fb;
+  --mist-ink: #8bb0c6;
+
+  --font: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --shadow-card: 0 10px 30px rgba(30, 92, 130, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--blue-ink);
+  background: var(--blue-deep);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ---- The disco ball (shared motif) ----------------------------------- */
+/* Sized by its container's width/height; used for map stations, the
+   "you are here" marker, and the mobile progress ball. */
+.disco-ball {
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(-45deg, rgba(30, 92, 130, 0.25) 0 3px, transparent 3px 6px),
+    radial-gradient(circle at 34% 28%, #fff, #dff1fb 40%, #9fd3ef 74%, var(--blue-deep));
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), inset -3px -4px 8px rgba(30, 92, 130, 0.4);
+}
+
+/* A visited/done station gilds gold. */
+.disco-ball.done {
+  box-shadow: 0 0 14px #f0c765;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 0 3px, transparent 3px 6px),
+    repeating-linear-gradient(-45deg, rgba(180, 130, 20, 0.3) 0 3px, transparent 3px 6px),
+    radial-gradient(circle at 34% 28%, #fff, #ffe8a8 42%, var(--gold-notch) 78%, #d9a53a);
+}
+
+/* The active station glows brighter white. */
+.disco-ball.active {
+  box-shadow: 0 0 22px #fff, inset -3px -4px 8px rgba(30, 92, 130, 0.4);
+}
+
+/* ---- Photo slot ------------------------------------------------------ */
+.photo-slot {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: var(--shadow-card);
+}
+
+.photo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-slot.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1.5px dashed var(--frame);
+  background: var(--card);
+  color: var(--mist-ink);
+}
+
+.photo-slot .slot-emoji { font-size: 1.6em; }
+.photo-slot .slot-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+.photo-slot .slot-sub {
+  font-size: 0.7rem;
+  color: var(--mist-ink);
+}
+
+/* ---- Day / event chip ------------------------------------------------ */
+.day-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--blue-ink);
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(30, 92, 130, 0.2);
+}
+.day-tab .day-name {
+  font-weight: 600;
+  color: var(--blue-deep);
+  opacity: 0.8;
+}
+
+/* ---- Overlays (title + closing) -------------------------------------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.28), transparent 45%),
+    radial-gradient(circle at 82% 80%, rgba(255, 255, 255, 0.2), transparent 40%),
+    var(--blue-deep);
+  color: #fff;
+}
+.overlay .overlay-balls { font-size: clamp(2.4rem, 9vw, 4rem); }
+.overlay h1 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  margin: 0.3em 0 0.1em;
+  font-weight: 800;
+  text-shadow: 0 3px 18px rgba(30, 92, 130, 0.5);
+}
+.overlay .overlay-sub {
+  font-size: clamp(1rem, 3.4vw, 1.5rem);
+  font-weight: 600;
+  opacity: 0.95;
+}
+.overlay .overlay-tagline {
+  margin-top: 0.8em;
+  font-size: clamp(0.85rem, 3vw, 1.1rem);
+  opacity: 0.9;
+  max-width: 34ch;
+}
+.overlay .overlay-cta {
+  margin-top: 2rem;
+  padding: 14px 34px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--blue-ink);
+  font-weight: 800;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  transition: transform 0.15s ease;
+}
+.overlay .overlay-cta:active { transform: scale(0.96); }
+.overlay .overlay-secondary {
+  margin-top: 1rem;
+  color: #fff;
+  opacity: 0.85;
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
+
+/* ---- Desktop zoom map ------------------------------------------------ */
+.weekend-map {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.18), transparent 40%),
+    radial-gradient(circle at 90% 88%, rgba(255, 255, 255, 0.12), transparent 40%),
+    var(--blue-deep);
+}
+
+/* react-zoom-pan-pinch wrappers must fill the screen. */
+.weekend-map .react-transform-wrapper,
+.weekend-map .react-transform-component {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.map-world {
+  position: relative;
+  cursor: grab;
+}
+.map-world:active { cursor: grabbing; }
+
+.map-art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.map-day-label {
+  fill: rgba(255, 255, 255, 0.55);
+  font-family: var(--font);
+  font-weight: 800;
+  font-size: 90px;
+  letter-spacing: 12px;
+  text-transform: uppercase;
+}
+
+.disco-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+  z-index: 1;
+}
+
+.event-station {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.station-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+}
+.station-head .disco-ball { transition: transform 0.2s ease; }
+.station-head:hover .disco-ball { transform: scale(1.08); }
+.station-label {
+  font-weight: 800;
+  font-size: 34px;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(30, 92, 130, 0.6);
+  white-space: nowrap;
+}
+
+.station-panel {
+  margin-top: 26px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  backdrop-filter: blur(2px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.station-panel.active {
+  border-color: #fff;
+  box-shadow: 0 0 60px rgba(255, 255, 255, 0.35);
+}
+.station-caption {
+  color: #eaf6fc;
+  font-size: 24px;
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 600;
+}
+
+.outfit-group {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 18px;
+  border: 2px solid transparent;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+.outfit-group.active {
+  border-color: var(--gold-notch);
+  background: rgba(255, 255, 255, 0.16);
+}
+.outfit-title {
+  color: #fff;
+  font-weight: 800;
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+.outfit-photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.outfit-photos .photo-slot .slot-emoji { font-size: 42px; }
+.outfit-photos .photo-slot .slot-label { font-size: 22px; }
+.outfit-photos .photo-slot .slot-sub { font-size: 16px; }
+
+.map-controls {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20;
+}
+.map-controls button {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--blue-ink);
+  font-size: 1.4rem;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(30, 92, 130, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease;
+}
+.map-controls button:active { transform: scale(0.92); }
+
+/* On-screen hint for the desktop guided tour. */
+.map-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: rgba(30, 92, 130, 0.8);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* ---- Mobile swipe deck ----------------------------------------------- */
+.deck {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 18px calc(20px + env(safe-area-inset-bottom));
+  gap: 12px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.22), transparent 45%),
+    radial-gradient(circle at 88% 90%, rgba(255, 255, 255, 0.16), transparent 42%),
+    var(--blue-deep);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.deck-top { padding-top: env(safe-area-inset-top); }
+
+.deck-stage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.deck-card {
+  width: min(78vw, 340px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  will-change: transform;
+}
+
+.deck-card .photo-slot { width: 100%; }
+
+.deck-photo-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 0.95rem;
+}
+.deck-photo-label strong { font-weight: 800; }
+.deck-photo-label span { opacity: 0.85; font-weight: 600; }
+
+.deck-caption {
+  color: #eaf6fc;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  max-width: 34ch;
+  min-height: 2.4em;
+}
+
+.deck-hints {
+  display: flex;
+  gap: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ---- Disco progress track -------------------------------------------- */
+.disco-progress {
+  position: relative;
+  width: min(88vw, 360px);
+  height: 34px;
+  display: flex;
+  align-items: center;
+}
+.disco-track {
+  position: absolute;
+  inset: 0 0 auto 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+.disco-track::before {
+  content: '';
+  position: absolute;
+  left: 4px; right: 4px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.28);
+}
+.disco-notch {
+  position: relative;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+.disco-notch.passed { background: var(--gold-notch); box-shadow: 0 0 6px var(--gold-notch); }
+.disco-notch.current { background: #fff; }
+
+.disco-progress-ball {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.disco-progress-ball .disco-ball { display: block; }
+
+/* ---- Utility --------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
