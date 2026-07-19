@@ -24,12 +24,7 @@ export default function DiscoProgress({ activeIndex }) {
         animate={{ left: `calc(${(activeIndex / (count - 1)) * 100}% )` }}
         transition={{ type: 'spring', stiffness: 260, damping: 26 }}
       >
-        <motion.span
-          className="disco-ball"
-          style={{ width: 26, height: 26 }}
-          animate={{ rotate: activeIndex * 90 }}
-          transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-        />
+        <span className="emoji-ball" style={{ fontSize: 26 }}>🪩</span>
       </motion.div>
     </div>
   )

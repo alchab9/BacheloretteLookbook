@@ -14,7 +14,7 @@ export default function PhotoSlot({ src, role, outfitNumber, className = '' }) {
       <div className={`photo-slot ${className}`}>
         <img
           src={src}
-          alt={`${roleLabels[role] ?? role} — Outfit ${outfitNumber}`}
+          alt={`${roleLabels[role] ?? role} — Option ${outfitNumber}`}
           loading="lazy"
           onError={() => setFailed(true)}
         />
@@ -26,7 +26,7 @@ export default function PhotoSlot({ src, role, outfitNumber, className = '' }) {
     <div className={`photo-slot placeholder ${className}`}>
       <span className="slot-emoji">{roleEmoji[role] ?? '📷'}</span>
       <span className="slot-label">{roleLabels[role] ?? role}</span>
-      {outfitNumber ? <span className="slot-sub">Outfit {outfitNumber}</span> : null}
+      {outfitNumber ? <span className="slot-sub">Option {outfitNumber}</span> : null}
     </div>
   )
 }

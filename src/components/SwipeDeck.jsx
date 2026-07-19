@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { events, roles, roleLabels } from '../data/journey.js'
+import { events, roles } from '../data/journey.js'
 import DayTab from './DayTab.jsx'
 import PhotoSlot from './PhotoSlot.jsx'
 import DiscoProgress from './DiscoProgress.jsx'
@@ -15,7 +15,8 @@ export default function SwipeDeck({ nav, goNext, goPrev, goToEvent, goToScreen }
   const event = events[nav.eventIndex]
   const outfitIndex = Math.floor(nav.pos / 3)
   const role = roles[nav.pos % 3]
-  const src = event.outfits[outfitIndex][role]
+  const outfit = event.outfits[outfitIndex]
+  const src = outfit[role]
 
   // Remember the axis+direction of the last move so the card animates the right way.
   const dir = useRef({ axis: 'x', sign: 1 })
@@ -91,9 +92,12 @@ export default function SwipeDeck({ nav, goNext, goPrev, goToEvent, goToScreen }
           >
             <PhotoSlot src={src} role={role} outfitNumber={outfitIndex + 1} />
             <div className="deck-photo-label">
-              <strong>{roleLabels[role]}</strong>
-              <span>Outfit {outfitIndex + 1}</span>
+              <strong />
+              <span>Option {outfitIndex + 1}</span>
             </div>
+            {outfit.warning && (
+              <div className="deck-warning">⚠️ {outfit.warning}</div>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

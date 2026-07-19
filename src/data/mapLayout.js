@@ -4,7 +4,7 @@
 
 import { events } from './journey.js'
 
-export const WORLD = { w: 8600, h: 2500 }
+export const WORLD = { w: 8600, h: 2100 }
 
 // Fixed cell width for a station (ball + its outfit panel). Stations are spaced
 // wider than this so panels never overlap at full zoom.
@@ -14,12 +14,14 @@ export const BALL_SIZE = 96
 const X0 = 520
 const X_STEP = 920
 
-// Ball-top y for each event — a wave that also keeps the day-clusters visually grouped.
-const Y_BY_INDEX = [900, 560, 980, 520, 960, 540, 980, 520, 900]
+// Straight horizontal layout — all stations share one baseline, so the trail
+// runs left-to-right across the weekend. Sits just below the big day label so the
+// overview doesn't waste vertical space between the day name and the disco balls.
+const BASE_Y = 300
 
 export const stations = events.map((ev, i) => {
   const x = X0 + i * X_STEP
-  const y = Y_BY_INDEX[i]
+  const y = BASE_Y
   return {
     id: ev.id,
     index: i,
@@ -49,10 +51,24 @@ export function trailPath() {
   return d
 }
 
-// Day-region labels floated above their clusters.
-export const dayRegions = [
-  { day: 'Thursday', x: stations[1].x, y: 210 },
-  { day: 'Friday', x: stations[4].x, y: 170 },
-  { day: 'Saturday', x: (stations[6].x + stations[7].x) / 2, y: 170 },
-  { day: 'Sunday', x: stations[8].x, y: 210 },
-]
+// Day regions: each spans the x-range of its consecutive events. Used to draw
+// tinted background bands + big labels so the day-clusters read clearly, and so
+// crossing from one day to the next is visually obvious.
+const HALF = STATION_WIDTH / 2
+const BAND_PAD = 70
+
+export const dayBands = (() => {
+  const bands = []
+  let start = 0
+  for (let i = 1; i <= stations.length; i++) {
+    if (i === stations.length || events[i].day !== events[start].day) {
+      const first = stations[start]
+      const last = stations[i - 1]
+      const x = first.x - HALF - BAND_PAD
+      const w = last.x + HALF + BAND_PAD - x
+      bands.push({ day: events[start].day, x, w, cx: (first.x + last.x) / 2 })
+      start = i
+    }
+  }
+  return bands
+})()

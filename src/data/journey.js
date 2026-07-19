@@ -7,11 +7,14 @@
 
 // Build the three-outfit / nine-photo structure for one event without repeating
 // the path strings nine times each.
-function outfitsFor(eventId) {
-  return [1, 2, 3].map((outfit) => ({
+// `extras` optionally merges per-outfit fields (e.g. a warning) keyed by the
+// outfit index (0-2).
+function outfitsFor(eventId, extras = {}) {
+  return [1, 2, 3].map((outfit, i) => ({
     alex: `photos/${eventId}-${outfit}-alex.jpg`,
     natalie: `photos/${eventId}-${outfit}-natalie.jpg`,
     together: `photos/${eventId}-${outfit}-together.jpg`,
+    ...extras[i],
   }))
 }
 
@@ -29,15 +32,17 @@ export const events = [
     day: 'Thursday',
     event: 'Play Clothes',
     emoji: '🌼',
-    caption: 'Landed & loose — exploring before the disco lights come on.',
-    outfits: outfitsFor(2),
+    caption: "Grab your high noon & bottle of wine, it's time to lay all your love on a game table.",
+    outfits: outfitsFor(2, {
+      2: { warning: "Don't be like Alex! White clothing is reserved for Emily only!" },
+    }),
   },
   {
     id: 3,
     day: 'Thursday',
     event: 'PJs',
     emoji: '🌙',
-    caption: 'Slipping Through My Fingers… into cozy pajamas. Night one, wine in hand.',
+    caption: "Dancing Queens Need Downtime Too. It's Time For Snoozes.",
     outfits: outfitsFor(3),
   },
   {
@@ -53,7 +58,7 @@ export const events = [
     day: 'Friday',
     event: 'Play Clothes',
     emoji: '🌸',
-    caption: 'Chiquitita, take it easy — a casual afternoon between tastings.',
+    caption: 'Chiquitita, take it easy. A casual evening after tastings.',
     outfits: outfitsFor(5),
   },
   {
@@ -61,7 +66,7 @@ export const events = [
     day: 'Friday',
     event: 'Bathing Suits',
     emoji: '👙',
-    caption: 'Lay All Your Love (of poolside lounging) On Me. Sun, spritz, sparkle.',
+    caption: 'Waterloo? More like Water-Woo! Pack a swim suit for the hot tub out back.',
     outfits: outfitsFor(6),
   },
   {
@@ -69,7 +74,7 @@ export const events = [
     day: 'Saturday',
     event: 'Pickleball',
     emoji: '🎾',
-    caption: 'Take a Chance on Me — dinking our way to victory. Sporty & cute.',
+    caption: 'Take a chance on me, dinking our way to victory! Now\'s the time to show off your dynamic duo costume!',
     outfits: outfitsFor(7),
   },
   {
@@ -85,7 +90,7 @@ export const events = [
     day: 'Sunday',
     event: 'Walking Around Town',
     emoji: '🚶‍♀️',
-    caption: 'Thank You for the Music. One last stroll before goodbye.',
+    caption: 'Thank You for the Music. One last day before goodbye.',
     outfits: outfitsFor(9),
   },
 ]
@@ -95,9 +100,9 @@ export const roles = ['alex', 'natalie', 'together']
 export const roleLabels = { alex: 'Alex', natalie: 'Natalie', together: 'Together' }
 
 export const intro = {
-  title: 'Here We Go Again',
+  title: "Mamma Mia! Emily's Getting Married!",
   subtitle: "Emily's Bachelorette · Napa Valley",
-  tagline: 'Gimme! Gimme! Gimme! a weekend in wine country 🪩🍷',
+  tagline: 'Gimme! Gimme! Gimme! A weekend in wine country 🪩🍷',
 }
 
 export const outro = {

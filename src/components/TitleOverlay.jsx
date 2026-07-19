@@ -19,6 +19,14 @@ export default function TitleOverlay({ onStart }) {
       >
         🪩🍷🪩
       </motion.div>
+      <motion.div
+        className="overlay-hero"
+        initial={{ scale: 0.85, opacity: 0, rotate: -3 }}
+        animate={{ scale: 1, opacity: 1, rotate: -2 }}
+        transition={{ delay: 0.25, type: 'spring', stiffness: 120, damping: 14 }}
+      >
+        <img src="photos/emily-hero.png" alt="Emily — she said yes!" />
+      </motion.div>
       <h1>{intro.title}</h1>
       <div className="overlay-sub">{intro.subtitle}</div>
       <div className="overlay-tagline">{intro.tagline}</div>
